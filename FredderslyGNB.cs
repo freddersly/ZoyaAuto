@@ -4,7 +4,6 @@ namespace RotationSolver.ExtraRotations.Tank;
 
 [Rotation("FredderslyGNB", CombatType.PvE, GameVersion = "7.5")]
 [SourceCode(Path = "main/ExtraRotations/Tank/FredderslyGNB.cs")]
-[ExtraRotation]
 
 public sealed class FredderslyGNB : GunbreakerRotation
 {
