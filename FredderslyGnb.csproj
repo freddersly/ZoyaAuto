@@ -11,13 +11,20 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <!-- Reference RSR's real, current libraries that the build downloads into /libs.
-       The wildcard means we never have to name each DLL by hand. Private=false
-       keeps them out of the output, since RSR supplies them at runtime. -->
+  <!-- Every DLL the build downloaded into /libs -->
   <ItemGroup>
-    <Reference Include="libs\*.dll">
-      <Private>false</Private>
-    </Reference>
+    <LibFile Include="libs\*.dll" />
   </ItemGroup>
+
+  <!-- Turn each downloaded DLL into a proper reference with a HintPath, which
+       resolves reliably. This runs just before the compiler looks for references. -->
+  <Target Name="AddLocalLibs" BeforeTargets="ResolveAssemblyReferences;ResolveReferences">
+    <ItemGroup>
+      <Reference Include="%(LibFile.Filename)">
+        <HintPath>%(LibFile.FullPath)</HintPath>
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+  </Target>
 
 </Project>
