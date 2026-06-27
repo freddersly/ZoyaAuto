@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- This name becomes your DLL name: FredderslyGnb.dll -->
+    <AssemblyName>FredderslyGnb</AssemblyName>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Do not bundle RSR's own libraries; RSR provides them at runtime -->
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- RSR's official rotation-building library. If the build complains
+         about a missing action or API, this version number is the thing
+         to bump. -->
+    <PackageReference Include="RotationSolverReborn.Basic" Version="7.3.0.30" />
+  </ItemGroup>
+
+</Project>
