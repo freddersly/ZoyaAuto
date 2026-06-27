@@ -16,7 +16,7 @@
     <!-- RSR's official rotation-building library. If the build complains
          about a missing action or API, this version number is the thing
          to bump. -->
-    <PackageReference Include="RotationSolverReborn.Basic" Version="7.3.0.30" />
+    <PackageReference Include="RotationSolverReborn.Basic" Version="*" />
   </ItemGroup>
 
 </Project>
