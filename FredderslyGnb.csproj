@@ -3,20 +3,21 @@
   <PropertyGroup>
     <!-- This name becomes your DLL name: FredderslyGnb.dll -->
     <AssemblyName>FredderslyGnb</AssemblyName>
-    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <!-- Patch 7.5 RSR runs on .NET 10, so we target that -->
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!-- Do not bundle RSR's own libraries; RSR provides them at runtime -->
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
+  <!-- Reference RSR's real, current libraries that the build downloads into /libs.
+       The wildcard means we never have to name each DLL by hand. Private=false
+       keeps them out of the output, since RSR supplies them at runtime. -->
   <ItemGroup>
-    <!-- RSR's official rotation-building library. If the build complains
-         about a missing action or API, this version number is the thing
-         to bump. -->
-    <PackageReference Include="RotationSolverReborn.Basic" Version="*" />
+    <Reference Include="libs\*.dll">
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>
