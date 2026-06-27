@@ -16,7 +16,31 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
+
+      - name: Download the current RSR + Dalamud libraries
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          New-Item -ItemType Directory -Force -Path libs, dl | Out-Null
+
+          # Dalamud developer libraries (Dalamud, Lumina, FFXIVClientStructs, ImGui, etc.)
+          Invoke-WebRequest -Uri "https://goatcorp.github.io/dalamud-distrib/latest.zip" -OutFile dl/dalamud.zip
+          Expand-Archive -Path dl/dalamud.zip -DestinationPath dl/dalamud -Force
+
+          # RotationSolver Reborn's own libraries, from its latest release
+          $headers = @{ "User-Agent" = "github-actions"; "Authorization" = "Bearer $env:GH_TOKEN" }
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/FFXIV-CombatReborn/RotationSolverReborn/releases/latest" -Headers $headers
+          $zipUrl  = ($release.assets | Where-Object { $_.name -like "*.zip" } | Select-Object -First 1).browser_download_url
+          Invoke-WebRequest -Uri $zipUrl -OutFile dl/rsr.zip
+          Expand-Archive -Path dl/rsr.zip -DestinationPath dl/rsr -Force
+
+          # Flatten every DLL into /libs, keeping one copy of each name
+          Get-ChildItem -Recurse -Filter *.dll -Path dl | ForEach-Object {
+            $dest = Join-Path 'libs' $_.Name
+            if (-not (Test-Path $dest)) { Copy-Item $_.FullName $dest }
+          }
 
       - name: Build
         run: dotnet build -c Release
